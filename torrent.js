@@ -1,7 +1,6 @@
 /**
  * Torrent Speed Filter + Confirm Open + Multi-Language Voice Priority
  * Безпечний ланцюжок (не ламає інші плагіни)
- * Діалог авто-відкриття — по центру екрана
  */
 (function () {
   "use strict";
@@ -27,7 +26,6 @@
 
   var TEST_DURATION = 5000;
   var opening = false;
-  var CENTER_STYLE_ID = "torrent-speed-filter-center-select";
 
   // ===== Зберігаємо оригінальні функції =====
   var originalActivityPush = null;
@@ -290,33 +288,6 @@
     }
   }
 
-  // Центрування selectbox для діалогу авто-відкриття
-  function ensureCenterSelectStyle() {
-    if (document.getElementById(CENTER_STYLE_ID)) return;
-
-    var style = document.createElement("style");
-    style.id = CENTER_STYLE_ID;
-    style.textContent =
-      "body.selectbox--open .selectbox{" +
-      "display:flex!important;" +
-      "align-items:center!important;" +
-      "justify-content:center!important;" +
-      "}" +
-      "body.selectbox--open .selectbox__content{" +
-      "position:relative!important;" +
-      "top:auto!important;" +
-      "bottom:auto!important;" +
-      "left:auto!important;" +
-      "right:auto!important;" +
-      "transform:none!important;" +
-      "margin:0 auto!important;" +
-      "max-width:32em;" +
-      "width:90%;" +
-      "border-radius:1em;" +
-      "}";
-    document.head.appendChild(style);
-  }
-
   function tryAutoOpenBest(bestTorrent, movie) {
     if (!bestTorrent || !autoOpenEnabled()) return;
 
@@ -324,8 +295,6 @@
       if (askBeforeOpen()) {
         var title = getTitle(bestTorrent);
         var shortTitle = title.length > 70 ? title.substring(0, 67) + "..." : title;
-
-        ensureCenterSelectStyle();
 
         Lampa.Select.show({
           title: "Відкрити роздачу?",
@@ -343,10 +312,7 @@
               action: function () {}
             }
           ],
-          onBack: function () {},
-          onSelect: function (a) {
-            if (a && typeof a.action === "function") a.action();
-          }
+          onBack: function () {}
         });
       } else {
         openTorrent(bestTorrent, movie);
@@ -494,4 +460,4 @@
     };
     Lampa.Listener.follow("app", ready);
   }
-})();
+})()
